@@ -33,6 +33,9 @@ public class UserDto {
     @NotBlank
     private String phone;
 
+    private String status;
+    private String token;
+
     public static UserDto init(User user) {
         UserDto dto = new UserDto();
         dto.setId(user.getId());
@@ -41,6 +44,13 @@ public class UserDto {
         dto.setLastName(user.getLastName());
         dto.setPhone(user.getPhone());
         dto.setRole(user.getRole());
+        dto.setStatus(user.getStatus());
+        return dto;
+    }
+
+    public static UserDto initWithToken(User user, String token) {
+        UserDto dto = init(user);
+        dto.setToken(token);
         return dto;
     }
 }

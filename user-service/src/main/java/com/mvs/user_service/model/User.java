@@ -17,9 +17,15 @@ public class User {
     private String firstName;
     private String lastName;
     private String phone;
+    private String status;
 
     public static class UserRoles {
         public static final String ADMIN = "ADMIN";
         public static final String USER = "USER";
+    }
+
+    public static class UserStatus {
+        public static final String ACTIVE = "ACTIVE";
+        public static final String INACTIVE = "INACTIVE";
     }
 }

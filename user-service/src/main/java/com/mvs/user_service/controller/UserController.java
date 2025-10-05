@@ -5,10 +5,7 @@ import com.mvs.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -19,6 +16,16 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<UserDto> registerUser(@RequestBody @Validated UserDto userDto) {
-        return ResponseEntity.ok(UserDto.init(this.userService.registerUser(userDto)));
+        return ResponseEntity.ok(UserDto.init(userService.registerUser(userDto)));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserDto> login(@RequestBody UserDto userDto) {
+        return ResponseEntity.ok(userService.login(userDto));
+    }
+
+    @GetMapping
+    public ResponseEntity<UserDto> getUserProfile() {
+        return ResponseEntity.ok(UserDto.init(userService.getUserProfile()));
     }
 }
