@@ -1,6 +1,11 @@
 package com.mvs.user_service.service;
 
 import com.mvs.user_service.dto.UserDto;
+import com.mvs.user_service.exception.ExType;
+import com.mvs.user_service.exception.exs.BadRequestException;
+import com.mvs.user_service.exception.exs.ConflictException;
+import com.mvs.user_service.exception.exs.NotFoundException;
+import com.mvs.user_service.exception.exs.UnauthorizedException;
 import com.mvs.user_service.model.User;
 import com.mvs.user_service.repository.UserRepository;
 import com.mvs.user_service.security.JwtUtil;
@@ -25,7 +30,7 @@ public class UserService {
     public User registerUser(UserDto userDto) {
         log.info("registering user email = {}", userDto.getEmail());
         Optional<User> opUser = this.userRepository.findByEmail(userDto.getEmail());
-        if (opUser.isPresent()) throw new RuntimeException("User already exists");
+        if (opUser.isPresent()) throw new ConflictException(ExType.USER_ALREADY_EXISTS, "User already exists");
 
         User user = User.builder()
                 .email(userDto.getEmail())
@@ -42,20 +47,21 @@ public class UserService {
     public UserDto login(UserDto userDto) {
         log.info("login user email = {}", userDto.getEmail());
         if (StringUtils.isBlank(userDto.getEmail()) || StringUtils.isBlank(userDto.getPassword())) {
-            throw new RuntimeException("Login failed email or password empty");
+            throw new BadRequestException(ExType.INVALID_CREDENTIALS, "Login failed email or password empty");
         }
         Optional<User> opUser = this.userRepository.findByEmailAndStatus(userDto.getEmail(), User.UserStatus.ACTIVE);
-        if (opUser.isEmpty()) throw new RuntimeException("User does not exist");
+        if (opUser.isEmpty()) throw new NotFoundException(ExType.USER_NOT_FOUND, "User does not exist");
         if (!passwordEncoder.matches(userDto.getPassword(), opUser.get().getPassword())) {
-            throw new RuntimeException("Invalid email or password");
+            throw new UnauthorizedException(ExType.UNAUTHORIZED, "Invalid email or password");
         }
         String token = jwtUtil.generateToken(opUser.get());
         return UserDto.initWithToken(opUser.get(), token);
     }
 
     public User getUserById(String id) {
+        log.info("get user by id = {}", id);
         Optional<User> opUser = this.userRepository.findById(id);
-        if (opUser.isEmpty()) throw new RuntimeException("User does not exist");
+        if (opUser.isEmpty()) throw new NotFoundException(ExType.USER_NOT_FOUND, "User does not exist");
         return opUser.get();
     }
 

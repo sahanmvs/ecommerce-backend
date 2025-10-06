@@ -1,8 +1,9 @@
 package com.mvs.user_service.security;
 
+import com.mvs.user_service.exception.ExType;
+import com.mvs.user_service.exception.exs.UnauthorizedException;
 import com.mvs.user_service.model.User;
 import com.mvs.user_service.repository.UserRepository;
-import com.mvs.user_service.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -39,7 +39,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             if (!user.getStatus().equals(User.UserStatus.ACTIVE)) {
-                throw new RuntimeException("User is not active");
+                throw new UnauthorizedException(ExType.UNAUTHORIZED, "Can not perform this action");
             }
             if (jwtUtil.validateToken(jwtToken)) {
                 UsernamePasswordAuthenticationToken authenticationToken
