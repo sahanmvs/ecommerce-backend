@@ -11,26 +11,26 @@ public class UserDto {
 
     private String id;
 
-    @Size(min = 6, max = 100)
-    @NotBlank(message = "email can not be blank")
-    @Email(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
+    @Size(min = 6, max = 100, groups = {Registration.class, Update.class})
+    @NotBlank(message = "email can not be blank", groups = {Registration.class, Update.class})
+    @Email(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", groups = {Registration.class, Update.class})
     private String email;
 
-    @Size(min = 6, max = 100)
+    @Size(min = 6, max = 100, groups = {Registration.class, Deletion.class})
     private String password;
 
     private String role;
 
-    @Size(min = 1, max = 100)
-    @NotBlank
+    @Size(min = 1, max = 100, groups = {Registration.class, Update.class})
+    @NotBlank(groups = {Registration.class, Update.class})
     private String firstName;
 
-    @Size(min = 1, max = 100)
-    @NotBlank
+    @Size(min = 1, max = 100, groups = {Registration.class, Update.class})
+    @NotBlank(groups = {Registration.class, Update.class})
     private String lastName;
 
-    @Size(min = 3, max = 15)
-    @NotBlank
+    @Size(min = 3, max = 15, groups = {Registration.class, Update.class})
+    @NotBlank(groups = {Registration.class, Update.class})
     private String phone;
 
     private String status;
@@ -53,4 +53,8 @@ public class UserDto {
         dto.setToken(token);
         return dto;
     }
+
+    public interface Registration {}
+    public interface Update {}
+    public interface Deletion {}
 }
