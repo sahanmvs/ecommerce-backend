@@ -12,7 +12,6 @@ import com.mvs.user_service.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -65,10 +64,32 @@ public class UserService {
         return opUser.get();
     }
 
-    public User getUserProfile() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = (User) principal;
-        log.info("get user profile id = {}", user.getId());
-        return this.getUserById(user.getId());
+    public User getUserProfile(String userId) {
+        log.info("get user profile id = {}", userId);
+        return this.getUserById(userId);
+    }
+
+    public User updateUserProfile(UserDto userDto, String userId) {
+        User user = this.getUserById(userId);
+        if (!user.getEmail().equals(userDto.getEmail())) {
+            Optional<User> opUserByEmail = userRepository.findByEmail(userDto.getEmail());
+            if (opUserByEmail.isPresent()) throw new ConflictException(ExType.USER_ALREADY_EXISTS, "User already exists");
+            // todo handle email verification
+        }
+        user.setEmail(userDto.getEmail());
+        user.setPhone(userDto.getPhone());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        return userRepository.save(user);
+    }
+
+    public User deleteUserProfile(UserDto userDto, String userId) {
+        log.info("delete user profile id = {}", userId);
+        User user = this.getUserById(userId);
+        if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
+            throw new UnauthorizedException(ExType.UNAUTHORIZED, "Invalid password");
+        }
+        user.setStatus(User.UserStatus.DEACTIVATED);
+        return userRepository.save(user);
     }
 }

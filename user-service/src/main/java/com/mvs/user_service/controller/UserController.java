@@ -1,9 +1,11 @@
 package com.mvs.user_service.controller;
 
 import com.mvs.user_service.dto.UserDto;
+import com.mvs.user_service.model.User;
 import com.mvs.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +17,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserDto> registerUser(@RequestBody @Validated UserDto userDto) {
+    public ResponseEntity<UserDto> registerUser(@RequestBody @Validated(UserDto.Registration.class) UserDto userDto) {
         return ResponseEntity.ok(UserDto.init(userService.registerUser(userDto)));
     }
 
@@ -25,7 +27,26 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<UserDto> getUserProfile() {
-        return ResponseEntity.ok(UserDto.init(userService.getUserProfile()));
+    public ResponseEntity<UserDto> getUserProfile(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        return ResponseEntity.ok(UserDto.init(userService.getUserProfile(user.getId())));
+    }
+
+    @PutMapping
+    public ResponseEntity<UserDto> updateUser(
+            @RequestBody @Validated(UserDto.Update.class) UserDto userDto,
+            Authentication authentication
+    ) {
+        User user = (User) authentication.getPrincipal();
+        return ResponseEntity.ok(UserDto.init(userService.updateUserProfile(userDto, user.getId())));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<UserDto> deleteUser(
+            @RequestBody @Validated(UserDto.Deletion.class) UserDto userDto,
+            Authentication authentication
+    ) {
+        User user = (User) authentication.getPrincipal();
+        return ResponseEntity.ok(UserDto.init(userService.deleteUserProfile(userDto, user.getId())));
     }
 }

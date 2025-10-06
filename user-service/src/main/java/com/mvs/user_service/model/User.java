@@ -26,6 +26,6 @@ public class User {
 
     public static class UserStatus {
         public static final String ACTIVE = "ACTIVE";
-        public static final String INACTIVE = "INACTIVE";
+        public static final String DEACTIVATED = "DEACTIVATED";
     }
 }
