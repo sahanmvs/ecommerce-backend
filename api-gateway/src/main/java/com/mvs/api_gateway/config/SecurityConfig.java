@@ -11,6 +11,9 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final SecurityProperties securityProperties;
+
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) throws Exception {
         return http
@@ -19,5 +22,10 @@ public class SecurityConfig {
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .build();
+    }
+
+    @Bean
+    public RoleBasedAccessFilter roleBasedAccessFilter() {
+        return new RoleBasedAccessFilter(securityProperties.getRoleRules());
     }
 }

@@ -22,3 +22,6 @@ spring:
               uri: lb://user-service
               predicates:
                 - Path=/api/user/**
+security:
+  role-rules:
+    '[/api/product/**]': ["ADMIN"]
