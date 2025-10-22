@@ -20,9 +20,18 @@ public class Product {
     private long price;
     private int stock;
     private String category;
+    private String status;
     @CreatedDate
     private Instant createdAt;
     @LastModifiedDate
     private Instant updatedAt;
+
+    @Data
+    public static class ProductStatus {
+        public static final String ACTIVE = "ACTIVE";
+        public static final String DELETED = "DELETED";
+        public static final String ARCHIVED = "ARCHIVED";
+        public static final String OUT_OF_STOCK = "OUT_OF_STOCK";
+    }
 }
 
