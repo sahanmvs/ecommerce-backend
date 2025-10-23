@@ -1,11 +1,9 @@
 package com.mvs.user_service.controller;
 
 import com.mvs.user_service.dto.UserDto;
-import com.mvs.user_service.model.User;
 import com.mvs.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,26 +25,23 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<UserDto> getUserProfile(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-        return ResponseEntity.ok(UserDto.init(userService.getUserProfile(user.getId())));
+    public ResponseEntity<UserDto> getUserProfile(@RequestHeader("X-User-Id") String userId) {
+        return ResponseEntity.ok(UserDto.init(userService.getUserProfile(userId)));
     }
 
     @PutMapping
     public ResponseEntity<UserDto> updateUser(
             @RequestBody @Validated(UserDto.Update.class) UserDto userDto,
-            Authentication authentication
+            @RequestHeader("X-User-Id") String userId
     ) {
-        User user = (User) authentication.getPrincipal();
-        return ResponseEntity.ok(UserDto.init(userService.updateUserProfile(userDto, user.getId())));
+        return ResponseEntity.ok(UserDto.init(userService.updateUserProfile(userDto, userId)));
     }
 
     @DeleteMapping
     public ResponseEntity<UserDto> deleteUser(
             @RequestBody @Validated(UserDto.Deletion.class) UserDto userDto,
-            Authentication authentication
+            @RequestHeader("X-User-Id") String userId
     ) {
-        User user = (User) authentication.getPrincipal();
-        return ResponseEntity.ok(UserDto.init(userService.deleteUserProfile(userDto, user.getId())));
+        return ResponseEntity.ok(UserDto.init(userService.deleteUserProfile(userDto, userId)));
     }
 }
