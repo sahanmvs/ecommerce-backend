@@ -31,6 +31,8 @@ public class RoleBasedAccessFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getPath().value();
         String role = exchange.getRequest().getHeaders().getFirst("X-User-Role");
+        String method = exchange.getRequest().getMethod().toString();
+        String request = method + ":" + path;
 
         for (String openPath : openPaths) {
             if (antPathMatcher.match(openPath, path)) {
@@ -43,9 +45,9 @@ public class RoleBasedAccessFilter implements GlobalFilter, Ordered {
         }
 
         for (Map.Entry<String, List<String>> entry : roleRules.entrySet()) {
-            if (antPathMatcher.match(entry.getKey(), path)) {
+            if (antPathMatcher.match(entry.getKey(), request)) {
                 if (!entry.getValue().contains(role)) {
-                    log.warn("Access denied path = {} role = {}", path, role);
+                    log.warn("Access denied request = {} role = {}", request, role);
                     return forbidden(exchange, "Access denied");
                 }
             }

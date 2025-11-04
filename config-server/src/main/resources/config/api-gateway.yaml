@@ -24,4 +24,8 @@ spring:
                 - Path=/api/user/**
 security:
   role-rules:
-    '[/api/product/**]': ["ADMIN"]
+    '[GET:/api/product/**]': ["ADMIN", "USER"]
+    '[POST:/api/product/**]': ["ADMIN"]
+    '[PUT:/api/product/**]': ["ADMIN"]
+    '[DELETE:/api/product/**]': ["ADMIN"]
+
