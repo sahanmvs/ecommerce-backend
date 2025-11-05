@@ -12,3 +12,8 @@ spring:
   data:
     mongodb:
       uri: ${MONGODB_URI:mongodb://localhost:27017/ecommerce_products}
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
