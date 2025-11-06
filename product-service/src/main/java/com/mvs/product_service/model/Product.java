@@ -21,6 +21,7 @@ public class Product {
     private int stock;
     private String category;
     private String status;
+    private Instant stockUpdatedAt;
     @CreatedDate
     private Instant createdAt;
     @LastModifiedDate

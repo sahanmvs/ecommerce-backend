@@ -2,6 +2,7 @@ package com.mvs.inventory_service.controller;
 
 import com.mvs.inventory_service.dto.InventoryDto;
 import com.mvs.inventory_service.dto.StockAdjustmentRequest;
+import com.mvs.inventory_service.model.Inventory;
 import com.mvs.inventory_service.service.InventoryService;
 import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
@@ -26,15 +27,16 @@ public class InventoryController {
     }
 
     @PostMapping("product/{id}/adjust")
-    public ResponseEntity<Void> adjustStock(@PathVariable("id") String productId,
+    public ResponseEntity<InventoryDto> adjustStock(@PathVariable("id") String productId,
                                             @RequestBody StockAdjustmentRequest request) {
+        Inventory inventory;
         if ("INCREASE".equalsIgnoreCase(request.getOperation())) {
-            inventoryService.increaseStock(productId, request.getQuantity());
+            inventory = inventoryService.increaseStock(productId, request.getQuantity());
         } else if ("DECREASE".equalsIgnoreCase(request.getOperation())) {
-            inventoryService.reduceStock(productId, request.getQuantity());
+            inventory = inventoryService.reduceStock(productId, request.getQuantity());
         } else {
             throw new BadRequestException("Invalid operation");
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(InventoryDto.init(inventory));
     }
 }
