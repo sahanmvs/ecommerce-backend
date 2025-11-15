@@ -11,7 +11,7 @@ public class Inventory {
     private String id;
     private String productId;
     private int quantity;
-    private int reserved;
+    private int reserved; // if pre-orders are handled
 
     public boolean isInStock(int qty) {
         return qty <= quantity - reserved;
