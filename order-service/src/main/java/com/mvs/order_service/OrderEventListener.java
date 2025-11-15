@@ -23,8 +23,9 @@ public class OrderEventListener {
     public void handle(StockReservedEvent event) {
         log.info("Received stock reserved event: {}", event);
         Order order = orderService.getOrderById(event.getOrderId());
-        order.setStatus(Order.OrderStatus.RESERVED);
+        order.setStatus(Order.OrderStatus.PROCESSING);
         orderRepository.save(order);
+        // todo: payment request event
     }
 
     @KafkaListener(topics = KafkaTopics.STOCK_REJECTED, groupId = "order-group")
@@ -32,6 +33,7 @@ public class OrderEventListener {
         log.info("Received stock rejected event: {}", event);
         Order order = orderService.getOrderById(event.getOrderId());
         order.setStatus(Order.OrderStatus.CANCELLED);
+        order.setCancelReason(event.getReason());
         orderRepository.save(order);
     }
 

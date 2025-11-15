@@ -23,14 +23,15 @@ public class Order {
     private List<OrderItem> orderItems;
     private BigDecimal totalAmount;
     private String status;
+    private String cancelReason;
     @CreatedDate
     private Instant createdAt;
     @LastModifiedDate
     private Instant updatedAt;
 
     public static class OrderStatus {
-        public static final String CREATED = "CREATED";
-        public static final String RESERVED = "RESERVED";
+        public static final String PENDING = "PENDING";
+        public static final String PROCESSING = "PROCESSING";
         public static final String COMPLETED = "COMPLETED";
         public static final String CANCELLED = "CANCELLED";
         public static final String FAILED = "FAILED";

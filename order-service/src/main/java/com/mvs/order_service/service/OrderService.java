@@ -31,7 +31,7 @@ public class OrderService {
 
         Order order = Order.builder()
                 .userId(orderRequest.getUserId())
-                .status(Order.OrderStatus.CREATED)
+                .status(Order.OrderStatus.PENDING)
                 .orderItems(orderRequest.getItems())
                 .totalAmount(BigDecimal.valueOf(totalCents, 2))
                 .build();
