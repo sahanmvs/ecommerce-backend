@@ -2,6 +2,7 @@ package com.mvs.product_service;
 
 import com.mvs.common_module.events.InventoryUpdatedEvent;
 import com.mvs.common_module.events.KafkaTopics;
+import com.mvs.product_service.enums.ProductStatus;
 import com.mvs.product_service.model.Product;
 import com.mvs.product_service.repository.ProductRepository;
 import com.mvs.product_service.service.ProductService;
@@ -22,11 +23,14 @@ public class ProductEventListener {
     @KafkaListener(topics = KafkaTopics.INVENTORY_UPDATED, groupId = "product-group")
     public void handleInventoryUpdatedEvent(InventoryUpdatedEvent event) {
         log.info("receive inventory updated event: {}", event);
-        Product product = productService.getProduct(event.getProductId());
+        Product product = productService.getProductById(event.getProductId());
         if (product.getStockUpdatedAt() == null || event.getTimestamp().isAfter(product.getStockUpdatedAt())) {
             log.info("updating stock, productId = {}", event.getProductId());
             product.setStock(event.getQuantity());
             product.setStockUpdatedAt(Instant.now());
+            if (product.getStock() == 0) {
+                product.setStatus(ProductStatus.OUT_OF_STOCK);
+            }
             productRepository.save(product);
         }
     }

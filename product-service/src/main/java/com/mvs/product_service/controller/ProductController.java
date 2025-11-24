@@ -1,10 +1,9 @@
 package com.mvs.product_service.controller;
 
-import com.mvs.product_service.dto.PaginationDto;
-import com.mvs.product_service.dto.ProductDto;
-import com.mvs.product_service.dto.ProductSearchParams;
+import com.mvs.product_service.dto.*;
 import com.mvs.product_service.model.Product;
 import com.mvs.product_service.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,28 +18,27 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
-        return ResponseEntity.ok(ProductDto.init(productService.createProduct(productDto)));
+    public ResponseEntity<ProductDto> createProduct(@RequestBody @Valid ProductCreateRequest request) {
+        return ResponseEntity.ok(productService.createProduct(request));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProduct(@PathVariable String id) {
-        return ResponseEntity.ok(ProductDto.init(productService.getProduct(id))); // todo: only active products
+        return ResponseEntity.ok(productService.getProduct(id));
     }
 
     @GetMapping
     public ResponseEntity<PaginationDto<ProductDto>> searchProducts(ProductSearchParams params) { // todo: only active products for customers
-        Page<Product> page = productService.searchProducts(params);
-        return ResponseEntity.ok(new PaginationDto<>(ProductDto.init(page.getContent()), page));
+        return ResponseEntity.ok(productService.searchProducts(params));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productDto, @PathVariable String id) {
-        return ResponseEntity.ok(ProductDto.init(productService.updateProduct(productDto, id)));
+    public ResponseEntity<ProductDto> updateProduct(@RequestBody @Valid ProductUpdateRequest request, @PathVariable String id) {
+        return ResponseEntity.ok(productService.updateProduct(request, id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ProductDto> deleteProduct(@PathVariable String id) {
-        return ResponseEntity.ok(ProductDto.init(productService.deleteProduct(id)));
+        return ResponseEntity.ok(productService.deleteProduct(id));
     }
 }
