@@ -1,4 +1,4 @@
-package dto;
+package com.mvs.order_service.dto;
 
 import com.mvs.order_service.model.OrderItem;
 import jakarta.validation.constraints.NotBlank;
@@ -9,8 +9,6 @@ import java.util.List;
 
 @Data
 public class CreateOrderRequest {
-    @NotEmpty
-    private List<OrderItem> items;
-    @NotBlank
-    private String userId;
+    @NotBlank(message = "cart id is required")
+    private String cartId;
 }

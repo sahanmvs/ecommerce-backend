@@ -25,11 +25,11 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProduct(@PathVariable String id) {
-        return ResponseEntity.ok(ProductDto.init(productService.getProduct(id)));
+        return ResponseEntity.ok(ProductDto.init(productService.getProduct(id))); // todo: only active products
     }
 
     @GetMapping
-    public ResponseEntity<PaginationDto<ProductDto>> searchProducts(ProductSearchParams params) {
+    public ResponseEntity<PaginationDto<ProductDto>> searchProducts(ProductSearchParams params) { // todo: only active products for customers
         Page<Product> page = productService.searchProducts(params);
         return ResponseEntity.ok(new PaginationDto<>(ProductDto.init(page.getContent()), page));
     }

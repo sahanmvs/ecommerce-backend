@@ -3,6 +3,8 @@ package com.mvs.order_service;
 import com.mvs.common_module.events.KafkaTopics;
 import com.mvs.common_module.events.StockRejectedEvent;
 import com.mvs.common_module.events.StockReservedEvent;
+import com.mvs.order_service.enums.CancelReason;
+import com.mvs.order_service.enums.OrderStatus;
 import com.mvs.order_service.model.Order;
 import com.mvs.order_service.repository.OrderRepository;
 import com.mvs.order_service.service.OrderService;
@@ -23,7 +25,7 @@ public class OrderEventListener {
     public void handle(StockReservedEvent event) {
         log.info("Received stock reserved event: {}", event);
         Order order = orderService.getOrderById(event.getOrderId());
-        order.setStatus(Order.OrderStatus.PROCESSING);
+        order.setStatus(OrderStatus.PENDING_PAYMENT);
         orderRepository.save(order);
         // todo: payment request event
     }
@@ -32,8 +34,9 @@ public class OrderEventListener {
     public void handle(StockRejectedEvent event) {
         log.info("Received stock rejected event: {}", event);
         Order order = orderService.getOrderById(event.getOrderId());
-        order.setStatus(Order.OrderStatus.CANCELLED);
-        order.setCancelReason(event.getReason());
+        order.setStatus(OrderStatus.CANCELLED);
+        order.getMetadata().put("stock_rejected_reason", event.getReason());
+        order.setCancelReason(CancelReason.STOCK_REJECTED);
         orderRepository.save(order);
     }
 

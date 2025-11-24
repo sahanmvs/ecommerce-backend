@@ -30,6 +30,10 @@ spring:
               uri: lb://order-service
               predicates:
                 - Path=/api/order/**
+            - id: cart-service
+              uri: lb://cart-service
+              predicates:
+                - Path=/api/cart/**
 security:
   role-rules:
     '[GET:/api/product/**]': ["ADMIN", "USER"]

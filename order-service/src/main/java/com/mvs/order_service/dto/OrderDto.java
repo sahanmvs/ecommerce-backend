@@ -1,5 +1,6 @@
-package dto;
+package com.mvs.order_service.dto;
 
+import com.mvs.order_service.enums.OrderStatus;
 import com.mvs.order_service.model.Order;
 import com.mvs.order_service.model.OrderItem;
 import lombok.Data;
@@ -14,7 +15,7 @@ public class OrderDto {
     private String userId;
     private List<OrderItem> orderItems;
     private BigDecimal totalAmount;
-    private String status;
+    private OrderStatus status;
     private Instant createdAt;
     private Instant updatedAt;
 
@@ -22,8 +23,8 @@ public class OrderDto {
         OrderDto orderDto = new OrderDto();
         orderDto.setId(order.getId());
         orderDto.setUserId(order.getUserId());
-        orderDto.setOrderItems(order.getOrderItems());
-        orderDto.setTotalAmount(order.getTotalAmount());
+        orderDto.setOrderItems(order.getItems());
+        orderDto.setTotalAmount(order.getTotalPrice());
         orderDto.setStatus(order.getStatus());
         orderDto.setCreatedAt(order.getCreatedAt());
         orderDto.setUpdatedAt(order.getUpdatedAt());
