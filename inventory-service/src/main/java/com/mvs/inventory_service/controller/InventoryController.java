@@ -2,8 +2,10 @@ package com.mvs.inventory_service.controller;
 
 import com.mvs.inventory_service.dto.InventoryDto;
 import com.mvs.inventory_service.dto.StockAdjustmentRequest;
+import com.mvs.inventory_service.enums.StockOperation;
 import com.mvs.inventory_service.model.Inventory;
 import com.mvs.inventory_service.service.InventoryService;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,11 +30,11 @@ public class InventoryController {
 
     @PostMapping("product/{id}/adjust")
     public ResponseEntity<InventoryDto> adjustStock(@PathVariable("id") String productId,
-                                            @RequestBody StockAdjustmentRequest request) {
+                                            @RequestBody @Valid StockAdjustmentRequest request) {
         Inventory inventory;
-        if ("INCREASE".equalsIgnoreCase(request.getOperation())) {
+        if (StockOperation.INCREASE.equals(request.getOperation())) {
             inventory = inventoryService.increaseStock(productId, request.getQuantity());
-        } else if ("DECREASE".equalsIgnoreCase(request.getOperation())) {
+        } else if (StockOperation.DECREASE.equals(request.getOperation())) {
             inventory = inventoryService.reduceStock(productId, request.getQuantity());
         } else {
             throw new BadRequestException("Invalid operation");
