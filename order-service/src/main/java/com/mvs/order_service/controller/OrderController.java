@@ -29,4 +29,9 @@ public class OrderController {
     ) {
         return ResponseEntity.ok(OrderDto.init(orderService.cancelOrder(orderId, userId)));
     }
+
+    @GetMapping("/orders/{orderId}")
+    public ResponseEntity<OrderDto> getOrder(@PathVariable String orderId, @RequestHeader("X-User-Id") String userId) {
+        return ResponseEntity.ok(OrderDto.init(orderService.getUserOrder(userId, orderId)));
+    }
 }

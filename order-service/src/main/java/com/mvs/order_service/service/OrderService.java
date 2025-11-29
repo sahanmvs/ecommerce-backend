@@ -4,10 +4,7 @@ import com.mvs.common_module.events.KafkaTopics;
 import com.mvs.common_module.events.OrderCancelledEvent;
 import com.mvs.common_module.events.OrderCreatedEvent;
 import com.mvs.common_module.exceptions.ExType;
-import com.mvs.common_module.exceptions.exs.BadRequestException;
-import com.mvs.common_module.exceptions.exs.ConflictException;
-import com.mvs.common_module.exceptions.exs.NotFoundException;
-import com.mvs.common_module.exceptions.exs.UnauthorizedException;
+import com.mvs.common_module.exceptions.exs.*;
 import com.mvs.order_service.client.CartClient;
 import com.mvs.order_service.client.ProductClient;
 import com.mvs.order_service.dto.CartItemResponse;
@@ -127,5 +124,14 @@ public class OrderService {
             eventOrderItems.add(item);
         });
         return eventOrderItems;
+    }
+
+    public Order getUserOrder(String userId, String orderId) {
+        log.info("get user {} order {}", userId, orderId);
+        Order order = getOrderById(orderId);
+        if (!order.getUserId().equals(userId)) {
+            throw new ForbiddenException(ExType.UNAUTHORIZED, "Forbidden");
+        }
+        return order;
     }
 }

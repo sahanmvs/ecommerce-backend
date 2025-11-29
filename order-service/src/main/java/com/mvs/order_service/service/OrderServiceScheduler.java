@@ -37,7 +37,7 @@ public class OrderServiceScheduler {
                     .orderId(order.getId())
                     .items(orderService.getEventOrderItems(order.getItems()))
                     .build();
-            kafkaTemplate.send(KafkaTopics.ORDER_EXPIRED, event);
+            kafkaTemplate.send(KafkaTopics.ORDER_EXPIRED, event); // todo : release stock
             log.info("order {} expired and event sent", order.getId());
         });
     }

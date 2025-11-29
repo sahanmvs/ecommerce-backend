@@ -1,8 +1,6 @@
 package com.mvs.order_service;
 
-import com.mvs.common_module.events.KafkaTopics;
-import com.mvs.common_module.events.StockRejectedEvent;
-import com.mvs.common_module.events.StockReservedEvent;
+import com.mvs.common_module.events.*;
 import com.mvs.order_service.enums.CancelReason;
 import com.mvs.order_service.enums.OrderStatus;
 import com.mvs.order_service.model.Order;
@@ -40,5 +38,19 @@ public class OrderEventListener {
         orderRepository.save(order);
     }
 
-    // todo : handle payment events
+    @KafkaListener(topics = KafkaTopics.PAYMENT_SUCCESS, groupId = "order-group")
+    public void handle(PaymentSuccessEvent event) {
+        log.info("Received payment success event: {}", event);
+        Order order = orderService.getOrderById(event.getOrderId());
+        order.setStatus(OrderStatus.PAID);
+        orderRepository.save(order);
+    }
+
+    @KafkaListener(topics = KafkaTopics.PAYMENT_FAILED, groupId = "order-group")
+    public void handle(PaymentFailedEvent event) {
+        log.info("Received payment failed event: {}", event);
+        Order order = orderService.getOrderById(event.getOrderId());
+        order.setStatus(OrderStatus.FAILED); // todo : release stock
+        orderRepository.save(order);
+    }
 }
