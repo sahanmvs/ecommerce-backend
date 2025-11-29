@@ -30,6 +30,8 @@ public class ProductEventListener {
             product.setStockUpdatedAt(Instant.now());
             if (product.getStock() == 0) {
                 product.setStatus(ProductStatus.OUT_OF_STOCK);
+            } else {
+                product.setStatus(ProductStatus.ACTIVE);
             }
             productRepository.save(product);
         }
