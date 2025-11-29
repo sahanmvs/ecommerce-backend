@@ -21,10 +21,12 @@ public class RoleBasedAccessFilter implements GlobalFilter, Ordered {
 
     Map<String, List<String>> roleRules;
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
-    private final List<String> openPaths = List.of("/api/user/login", "/api/user/register", "/actuator/**");
+    //private final List<String> openPaths = List.of("/api/user/login", "/api/user/register", "/actuator/**", "/api/payment/webhook");
+    List<String> openPaths;
 
-    public RoleBasedAccessFilter(Map<String, List<String>> roleRules) {
+    public RoleBasedAccessFilter(Map<String, List<String>> roleRules, List<String> openPaths) {
         this.roleRules = roleRules;
+        this.openPaths = openPaths;
     }
 
     @Override

@@ -22,7 +22,8 @@ import java.util.List;
 public class JwtAuthGlobalFilter implements GlobalFilter, Ordered {
 
     private final JwtUtil jwtUtil;
-    private final List<String> openPaths = List.of("/api/user/login", "/api/user/register", "/actuator/**");
+    //private final List<String> openPaths = List.of("/api/user/login", "/api/user/register", "/actuator/**", "/api/payment/webhook");
+    private final List<String> openPaths;
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Override

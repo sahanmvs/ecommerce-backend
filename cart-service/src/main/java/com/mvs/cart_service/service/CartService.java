@@ -28,7 +28,7 @@ public class CartService {
 
     public CartDto createCart() {
         log.info("Creating new cart");
-        Cart cart = new Cart();
+        Cart cart = new Cart();  // todo: userId
         cartRepository.save(cart);
         return cartMapper.toDto(cart);
     }
