@@ -33,6 +33,7 @@ public class JwtAuthGlobalFilter implements GlobalFilter, Ordered {
 
         for (String openPath : openPaths) {
             if (antPathMatcher.match(openPath, path)) {
+                log.info("path is not restricted");
                 return chain.filter(exchange);
             }
         }

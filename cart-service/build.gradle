@@ -43,7 +43,8 @@ dependencies {
 //	implementation 'com.mvs:common-module:1.3.1'
     implementation 'com.github.sahanmvs:common-module:v1.6.1'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	testImplementation 'io.projectreactor:reactor-test'
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6")
+    testImplementation 'io.projectreactor:reactor-test'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

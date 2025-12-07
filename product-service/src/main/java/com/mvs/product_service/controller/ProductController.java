@@ -3,6 +3,7 @@ package com.mvs.product_service.controller;
 import com.mvs.product_service.dto.*;
 import com.mvs.product_service.model.Product;
 import com.mvs.product_service.service.ProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/product")
 @RequiredArgsConstructor
+@Tag(name = "Products")
 public class ProductController {
 
     private final ProductService productService;
