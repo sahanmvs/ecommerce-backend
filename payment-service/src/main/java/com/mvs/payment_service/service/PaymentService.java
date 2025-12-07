@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,14 +38,11 @@ public class PaymentService {
         if (!order.getStatus().equals("PENDING_PAYMENT")) {
             throw new ConflictException(ExType.INVALID_ORDER_STATUS, "invalid order status " + order.getStatus());
         }
-        paymentRepository.findPaymentRecordByOrderIdAndStatus(orderId, PaymentStatus.PENDING)
-                .ifPresent(paymentRecord ->
-                        new PaymentResponse(
-                                orderId,
-                                paymentRecord.getId(),
-                                paymentRecord.getMetadata().get("checkout_url")
-                        )
-                );
+        Optional<PaymentRecord> opPaymentRecord = paymentRepository.findPaymentRecordByOrderIdAndStatus(orderId, PaymentStatus.PENDING);
+        if (opPaymentRecord.isPresent()) {
+            return new PaymentResponse(orderId, opPaymentRecord.get().getId(), opPaymentRecord.get().getMetadata().get("checkout_url"));
+        }
+        
         CheckoutSession checkoutSession = paymentGateway.createCheckoutSession(order);
         PaymentRecord record = PaymentRecord.builder()
                 .orderId(order.getId())
