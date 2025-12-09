@@ -241,6 +241,7 @@ services:
       SPRING_PROFILES_ACTIVE: dev
       STRIPE_SECRET: ${STRIPE_SECRET}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+      WEB_URL: ${WEB_URL}
       MONGODB_URI: mongodb://payment-db:27017/payment_db
       CONFIG_SERVER_URI: http://config-server:8888
       EUREKA_SERVER_URI: http://service-registry:8761/eureka
