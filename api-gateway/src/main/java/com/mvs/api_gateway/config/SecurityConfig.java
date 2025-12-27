@@ -15,7 +15,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final SecurityProperties securityProperties;
-    private final List<String> openPaths = List.of("/api/user/login", "/api/user/register", "/actuator/**", "/api/payment/webhook");
+    private final List<String> openPaths = List.of("/api/user/login", "/api/user/register", "/actuator/**", "/api/*/actuator/**", "/api/payment/webhook");
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) throws Exception {
