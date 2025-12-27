@@ -11,6 +11,7 @@ A Spring Boot–based microservices architecture using Eureka, Config Server, AP
 - MongoDB
 - Docker & Docker Compose
 - JitPack dependency host (common-module)
+- Prometheus & Grafana
 
 ## Services
 - service-registry
@@ -61,6 +62,20 @@ A Spring Boot–based microservices architecture using Eureka, Config Server, AP
 
    Each microservice exposes Swagger at: http://localhost:<service-port>/swagger-ui.html
 
+## 📊 Monitoring
+
+This project uses **Prometheus** and **Grafana** for monitoring and metrics.
+
+### Prometheus
+- URL: http://localhost:9090
+- Scrapes metrics from Spring Boot services via `/actuator/prometheus`
+
+### Grafana
+- URL: http://localhost:3000
+- Default credentials:
+    - Username: admin
+    - Password: admin
+
 
 
 
@@ -70,6 +85,7 @@ A Spring Boot–based microservices architecture using Eureka, Config Server, AP
 /cart-service
 /config-server
 /inventory-service
+/monitoring
 /order-service
 /product-service
 /payment-service
@@ -80,7 +96,6 @@ docker-compose.yml
 ```
 
 ## TODO / Future Enhancements
-- Add Prometheus + Grafana for monitoring
 - Add notification service
 - Add JWT refresh token flow
 - Add rate-limiting & circuit breakers (Resilience4j)
