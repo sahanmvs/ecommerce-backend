@@ -1,5 +1,7 @@
 package com.mvs.user_service.service;
 
+import com.mvs.user_service.dto.LoginRequest;
+import com.mvs.user_service.dto.UserDeleteRequest;
 import com.mvs.user_service.dto.UserDto;
 import com.mvs.user_service.exception.ExType;
 import com.mvs.user_service.exception.exs.BadRequestException;
@@ -43,14 +45,14 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
-    public UserDto login(UserDto userDto) {
-        log.info("login user email = {}", userDto.getEmail());
-        if (StringUtils.isBlank(userDto.getEmail()) || StringUtils.isBlank(userDto.getPassword())) {
+    public UserDto login(LoginRequest request) {
+        log.info("login user email = {}", request.getEmail());
+        if (StringUtils.isBlank(request.getEmail()) || StringUtils.isBlank(request.getPassword())) {
             throw new BadRequestException(ExType.INVALID_CREDENTIALS, "Login failed email or password empty");
         }
-        Optional<User> opUser = this.userRepository.findByEmailAndStatus(userDto.getEmail(), User.UserStatus.ACTIVE);
+        Optional<User> opUser = this.userRepository.findByEmailAndStatus(request.getEmail(), User.UserStatus.ACTIVE);
         if (opUser.isEmpty()) throw new NotFoundException(ExType.USER_NOT_FOUND, "User does not exist");
-        if (!passwordEncoder.matches(userDto.getPassword(), opUser.get().getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), opUser.get().getPassword())) {
             throw new UnauthorizedException(ExType.UNAUTHORIZED, "Invalid email or password");
         }
         String token = jwtUtil.generateToken(opUser.get());
@@ -83,10 +85,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User deleteUserProfile(UserDto userDto, String userId) {
+    public User deleteUserProfile(UserDeleteRequest request, String userId) {
         log.info("delete user profile id = {}", userId);
         User user = this.getUserById(userId);
-        if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new UnauthorizedException(ExType.UNAUTHORIZED, "Invalid password");
         }
         user.setStatus(User.UserStatus.DEACTIVATED);
