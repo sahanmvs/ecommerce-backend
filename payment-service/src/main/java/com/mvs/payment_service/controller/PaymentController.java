@@ -10,11 +10,11 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/payment")
+@RequestMapping("/payments")
 public class PaymentController {
     private final PaymentService paymentService;
 
-    @PostMapping("/payments/{orderId}/initialize")
+    @PostMapping("/{orderId}/initialize")
     public PaymentResponse createCheckout(
             @RequestHeader("X-User-Id") String userId,
             @PathVariable  String orderId

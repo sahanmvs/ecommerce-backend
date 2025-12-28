@@ -17,7 +17,7 @@ public class OrderClient {
     public OrderResponse getOrder(String orderId, String userId) {
         return webClientBuilder.build()
                 .get()
-                .uri("http://order-service/api/order/orders/{id}", orderId)
+                .uri("http://order-service/orders/{id}", orderId)
                 .header("X-User-Id", userId)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse ->

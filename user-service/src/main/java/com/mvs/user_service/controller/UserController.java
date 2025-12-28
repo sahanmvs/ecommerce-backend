@@ -9,7 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 @Tag(name = "Users")
 public class UserController {
@@ -26,12 +26,12 @@ public class UserController {
         return ResponseEntity.ok(userService.login(userDto));
     }
 
-    @GetMapping
+    @GetMapping("/me")
     public ResponseEntity<UserDto> getUserProfile(@RequestHeader("X-User-Id") String userId) {
         return ResponseEntity.ok(UserDto.init(userService.getUserProfile(userId)));
     }
 
-    @PutMapping
+    @PutMapping("/me")
     public ResponseEntity<UserDto> updateUser(
             @RequestBody @Validated(UserDto.Update.class) UserDto userDto,
             @RequestHeader("X-User-Id") String userId
@@ -39,7 +39,7 @@ public class UserController {
         return ResponseEntity.ok(UserDto.init(userService.updateUserProfile(userDto, userId)));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/me")
     public ResponseEntity<UserDto> deleteUser(
             @RequestBody @Validated(UserDto.Deletion.class) UserDto userDto,
             @RequestHeader("X-User-Id") String userId

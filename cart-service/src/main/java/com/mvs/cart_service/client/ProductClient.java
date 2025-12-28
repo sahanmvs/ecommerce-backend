@@ -17,7 +17,7 @@ public class ProductClient {
     public ProductResponse getProduct(String productId) {
         return webClientBuilder.build()
                 .get()
-                .uri("http://product-service/api/product/{id}", productId)
+                .uri("http://product-service/products/{id}", productId)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new BadRequestException(ExType.PRODUCT_NOT_FOUND, "product not found")))
                 .bodyToMono(ProductResponse.class)

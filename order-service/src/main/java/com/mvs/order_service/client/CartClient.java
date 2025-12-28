@@ -21,7 +21,7 @@ public class CartClient {
     public CartResponse getCart(String cartId) {
         return webClientBuilder.build()
                 .get()
-                .uri("http://cart-service/api/cart/" + cartId)
+                .uri("http://cart-service/carts/" + cartId)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new BadRequestException(ExType.CART_NOT_FOUND, "cart not found")))
                 .bodyToMono(CartResponse.class)
@@ -31,7 +31,7 @@ public class CartClient {
     public void updateCartItemPrices(String cartId, List<CartItemResponse> priceChanges) {
         webClientBuilder.build()
             .put()
-            .uri("http://cart-service/api/cart/{id}/prices", cartId)
+            .uri("http://cart-service/carts/{id}/prices", cartId)
             .bodyValue(priceChanges)
             .retrieve()
             .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new BadRequestException(ExType.CART_NOT_FOUND, "cart not found")))
@@ -42,7 +42,7 @@ public class CartClient {
     public void clearCart(String cartId) {
         webClientBuilder.build()
                 .delete()
-                .uri("http://cart-service/api/cart/{id}/items", cartId)
+                .uri("http://cart-service/carts/{id}/items", cartId)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new BadRequestException(ExType.CART_NOT_FOUND, "cart not found")))
                 .bodyToMono(Void.class)

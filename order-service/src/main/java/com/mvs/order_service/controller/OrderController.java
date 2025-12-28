@@ -9,7 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/orders")
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
@@ -30,7 +30,7 @@ public class OrderController {
         return ResponseEntity.ok(OrderDto.init(orderService.cancelOrder(orderId, userId)));
     }
 
-    @GetMapping("/orders/{orderId}")
+    @GetMapping("/{orderId}")
     public ResponseEntity<OrderDto> getOrder(@PathVariable String orderId, @RequestHeader("X-User-Id") String userId) {
         return ResponseEntity.ok(OrderDto.init(orderService.getUserOrder(userId, orderId)));
     }
