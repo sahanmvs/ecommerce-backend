@@ -12,23 +12,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/inventory")
+@RequestMapping("/inventories")
 @RequiredArgsConstructor
 public class InventoryController {
     private final InventoryService inventoryService;
 
-    @GetMapping("/product/{id}")
+    @GetMapping("/products/{id}")
     public ResponseEntity<InventoryDto> getStock(@PathVariable("id") String productId) {
         return ResponseEntity.ok(InventoryDto.init(inventoryService.getByProductId(productId)));
     }
 
-    @GetMapping("/product/{id}/available")
+    @GetMapping("/products/{id}/available")
     public ResponseEntity<Boolean> checkAvailability(@PathVariable("id") String productId,
                                                      @RequestParam int qty) {
         return ResponseEntity.ok(inventoryService.isAvailable(productId, qty));
     }
 
-    @PostMapping("product/{id}/adjust")
+    @PostMapping("products/{id}/adjust")
     public ResponseEntity<InventoryDto> adjustStock(@PathVariable("id") String productId,
                                             @RequestBody @Valid StockAdjustmentRequest request) {
         Inventory inventory;
