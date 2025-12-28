@@ -40,7 +40,8 @@ public class JwtAuthGlobalFilter implements GlobalFilter, Ordered {
 
         List<String> authHeaders = exchange.getRequest().getHeaders().getOrEmpty("Authorization");
         if (authHeaders.isEmpty()) {
-            return unauthorized(exchange, "Authorization header is required");
+//            return unauthorized(exchange, "Authorization header is required");
+            return chain.filter(exchange);
         }
         String token = authHeaders.get(0);
         if (token.contains("Bearer ")) {

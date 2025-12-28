@@ -42,20 +42,30 @@ public class RoleBasedAccessFilter implements GlobalFilter, Ordered {
             }
         }
 
-        if (role == null) {
+        /*if (role == null) {
             return unauthorized(exchange, "Missing user role");
-        }
+        }*/
 
         for (Map.Entry<String, List<String>> entry : roleRules.entrySet()) {
             if (antPathMatcher.match(entry.getKey(), request)) {
-                if (!entry.getValue().contains(role)) {
+                List<String> allowedRoles = entry.getValue();
+                if (allowedRoles.contains("PERMIT_ALL")) {
+                    log.info("path is not restricted");
+                    return chain.filter(exchange);
+                }
+                if (role == null) {
+                    return unauthorized(exchange, "Authorization header is required");
+                }
+                if (!allowedRoles.contains(role)) {
                     log.warn("Access denied request = {} role = {}", request, role);
                     return forbidden(exchange, "Access denied");
                 }
+
+                return  chain.filter(exchange);
             }
         }
 
-        return chain.filter(exchange);
+        return forbidden(exchange, "Access denied");
     }
 
     @Override
