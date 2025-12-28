@@ -1,7 +1,10 @@
 package com.mvs.user_service.controller;
 
+import com.mvs.user_service.dto.LoginRequest;
+import com.mvs.user_service.dto.UserDeleteRequest;
 import com.mvs.user_service.dto.UserDto;
 import com.mvs.user_service.service.UserService;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,28 +25,28 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDto> login(@RequestBody UserDto userDto) {
-        return ResponseEntity.ok(userService.login(userDto));
+    public ResponseEntity<UserDto> login(@RequestBody LoginRequest request) {
+        return ResponseEntity.ok(userService.login(request));
     }
-
+    
     @GetMapping("/me")
-    public ResponseEntity<UserDto> getUserProfile(@RequestHeader("X-User-Id") String userId) {
+    public ResponseEntity<UserDto> getUserProfile(@Parameter(hidden = true) @RequestHeader("X-User-Id") String userId) {
         return ResponseEntity.ok(UserDto.init(userService.getUserProfile(userId)));
     }
 
     @PutMapping("/me")
     public ResponseEntity<UserDto> updateUser(
             @RequestBody @Validated(UserDto.Update.class) UserDto userDto,
-            @RequestHeader("X-User-Id") String userId
+            @Parameter(hidden = true) @RequestHeader("X-User-Id") String userId
     ) {
         return ResponseEntity.ok(UserDto.init(userService.updateUserProfile(userDto, userId)));
     }
 
     @DeleteMapping("/me")
     public ResponseEntity<UserDto> deleteUser(
-            @RequestBody @Validated(UserDto.Deletion.class) UserDto userDto,
-            @RequestHeader("X-User-Id") String userId
+            @RequestBody UserDeleteRequest request,
+            @Parameter(hidden = true) @RequestHeader("X-User-Id") String userId
     ) {
-        return ResponseEntity.ok(UserDto.init(userService.deleteUserProfile(userDto, userId)));
+        return ResponseEntity.ok(UserDto.init(userService.deleteUserProfile(request, userId)));
     }
 }
