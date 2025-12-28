@@ -7,10 +7,12 @@ A Spring Boot–based microservices architecture using Eureka, Config Server, AP
 ## Tech Stack
 - Spring Boot (Microservices)
 - Spring Cloud (Eureka, Config Server, Gateway)
+- Spring Security (WebFlux, centralized at API Gateway)
 - Kafka & Zookeeper
 - MongoDB
 - Docker & Docker Compose
 - JitPack dependency host (common-module)
+- OpenAPI / Swagger (API documentation)
 - Prometheus & Grafana
 
 ## Services
@@ -60,7 +62,7 @@ A Spring Boot–based microservices architecture using Eureka, Config Server, AP
 
 6. API Documentation
 
-   Each microservice exposes Swagger at: http://localhost:<service-port>/swagger-ui.html
+   All microservices Swaggers exposed through API Gateway at: http://localhost:8080/swagger-ui.html
 
 ## 📊 Monitoring
 

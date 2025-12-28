@@ -3,6 +3,8 @@ package com.mvs.payment_service.controller;
 import com.mvs.payment_service.dto.CheckoutRequest;
 import com.mvs.payment_service.dto.PaymentResponse;
 import com.mvs.payment_service.service.PaymentService;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,12 +18,13 @@ public class PaymentController {
 
     @PostMapping("/{orderId}/initialize")
     public PaymentResponse createCheckout(
-            @RequestHeader("X-User-Id") String userId,
+            @Parameter(hidden = true) @RequestHeader("X-User-Id") String userId,
             @PathVariable  String orderId
     ) {
         return paymentService.createCheckout(userId, orderId);
     }
 
+    @Hidden
     @PostMapping("/webhook")
     public void handleWebhook(@RequestHeader Map<String, String> headers,
                               @RequestBody String payload) {

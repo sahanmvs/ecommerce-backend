@@ -20,7 +20,8 @@ public class SecurityConfig {
             "/api/users/register",
             "/api/payments/webhook",
             "/actuator/**",
-            "/api/*/actuator/**"
+            "/api/*/actuator/**",
+            "/api/*/v3/api-docs"
     );
 
     @Bean

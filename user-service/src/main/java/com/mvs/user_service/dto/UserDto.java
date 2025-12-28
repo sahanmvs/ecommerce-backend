@@ -16,7 +16,7 @@ public class UserDto {
     @Email(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", groups = {Registration.class, Update.class})
     private String email;
 
-    @Size(min = 6, max = 100, groups = {Registration.class, Deletion.class})
+    @Size(min = 6, max = 100, groups = {Registration.class})
     private String password;
 
     private String role;
@@ -34,6 +34,7 @@ public class UserDto {
     private String phone;
 
     private String status;
+
     private String token;
 
     public static UserDto init(User user) {
@@ -56,5 +57,4 @@ public class UserDto {
 
     public interface Registration {}
     public interface Update {}
-    public interface Deletion {}
 }

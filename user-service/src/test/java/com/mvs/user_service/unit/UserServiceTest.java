@@ -1,5 +1,7 @@
 package com.mvs.user_service.unit;
 
+import com.mvs.user_service.dto.LoginRequest;
+import com.mvs.user_service.dto.UserDeleteRequest;
 import com.mvs.user_service.dto.UserDto;
 import com.mvs.user_service.exception.exs.ConflictException;
 import com.mvs.user_service.exception.exs.NotFoundException;
@@ -74,7 +76,7 @@ public class UserServiceTest {
         Mockito.when(passwordEncoder.matches("raw", "hashed")).thenReturn(true);
         Mockito.when(jwtUtil.generateToken(Mockito.any())).thenReturn("token");
 
-        UserDto dto = new UserDto();
+        LoginRequest dto = new LoginRequest();
         dto.setEmail(user.getEmail());
         dto.setPassword("raw");
 
@@ -93,7 +95,7 @@ public class UserServiceTest {
         user.setPassword("hashed");
 
         Mockito.when(userRepository.findByEmailAndStatus(user.getEmail(), User.UserStatus.ACTIVE)).thenReturn(Optional.empty());
-        UserDto dto = new UserDto();
+        LoginRequest dto = new LoginRequest();
         dto.setEmail(user.getEmail());
         dto.setPassword("raw");
 
@@ -111,7 +113,7 @@ public class UserServiceTest {
         Mockito.when(userRepository.findByEmailAndStatus(user.getEmail(), User.UserStatus.ACTIVE)).thenReturn(Optional.of(user));
         Mockito.when(passwordEncoder.matches("password", "hashed")).thenReturn(false);
 
-        UserDto dto = new UserDto();
+        LoginRequest dto = new LoginRequest();
         dto.setEmail(user.getEmail());
         dto.setPassword("password");
 
@@ -164,7 +166,7 @@ public class UserServiceTest {
         user.setEmail("john@gmail.com");
         user.setPassword("hashed");
 
-        UserDto dto = new UserDto();
+        UserDeleteRequest dto = new UserDeleteRequest();
         dto.setPassword("raw");
 
         Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -186,7 +188,7 @@ public class UserServiceTest {
         user.setEmail("john@gmail.com");
         user.setPassword("hashed");
 
-        UserDto dto = new UserDto();
+        UserDeleteRequest dto = new UserDeleteRequest();
         dto.setPassword("raw");
 
         Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
